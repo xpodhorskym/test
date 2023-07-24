@@ -1,9 +1,9 @@
 name: Fetch and Save Invoices
 
 on:
-  push:
+  pull:
     branches:
-      - main # Zmena v hlavnej vetve repozitára
+      - next # Keď pullneš zmey, pustí sa akcia
 
 jobs:
   fetch_and_save:
@@ -12,8 +12,8 @@ jobs:
     steps:
       - name: Fetch invoices
         env:
-          KEY: ${{ secrets.FAKTURY_KEY }} # Predpokladám, že token je uložený ako GitHub Secret s názvom FAKTURY_KEY
-          EMAIL: ${{ secrets.FAKTURY_EMAIL }} # Predpokladám, že e-mail je uložený ako GitHub Secret s názvom FAKTURY_EMAIL
+          KEY: ${{ secrets.KEY }} # Predpokladám, že token je uložený ako GitHub Secret s názvom KEY
+          EMAIL: ${{ secrets.EMAIL }} # Predpokladám, že e-mail je uložený ako GitHub Secret s názvom EMAIL
         run: |
           # Vytvoríme požiadavku na získanie tokenu
           INIT_RESPONSE=$(curl -X GET "https://www.faktury-online.com/api/init?data={\"key\":\"${KEY}\",\"email\":\"${EMAIL}\"}")
