@@ -1,7 +1,11 @@
 name: Fetch and Save Invoices
 
 on:
-  workflow_dispatch
+  workflow_dispatch:
+    inputs:
+      param1:
+        description: 'Popis'
+        required: false
 
 jobs:
   fetch_and_save:
