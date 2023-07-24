@@ -34,7 +34,7 @@ jobs:
           echo TOKEN RESPONSE: ${token_response}
 
           # Vytvoríme GET požiadavku na získanie faktúr s použitím získaného tokenu
-          invoices_response=$(curl -X GET "https://www.faktury-online.com/api/list/created?data=${url_encoded_data}" -b "${cookie}")
+          invoices_response=$(curl -X GET "https://www.faktury-online.com/api/list/created?data=${url_encoded_data}" -b "${cookie}" -v -i)
           echo ${invoices_response}
 
           # Uložíme odpoveď do súboru (príklad súboru: invoices.json)
