@@ -37,3 +37,9 @@ jobs:
 
           # Uložíme odpoveď do súboru (príklad súboru: invoices.json)
           echo ${invoices_response} > invoices.json
+
+      - name: Save file to repository
+        uses: actions/upload-artifact@v2
+        with:
+          name: invoices  # Názov pre archív s faktúrami
+          path: invoices.json
