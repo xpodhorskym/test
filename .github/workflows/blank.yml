@@ -12,26 +12,28 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install jq
+        run: sudo apt-get install jq -y
+
       - name: Fetch invoices
         env:
           KEY: ${{ secrets.KEY }} # Predpokladám, že token je uložený ako GitHub Secret s názvom KEY
           EMAIL: ${{ secrets.EMAIL }} # Predpokladám, že e-mail je uložený ako GitHub Secret s názvom EMAIL
         run: |
-          # Vytvoríme požiadavku na získanie tokenu
-          INIT_RESPONSE=$(curl -X GET "https://www.faktury-online.com/api/init?data={\"key\":\"${KEY}\",\"email\":\"${EMAIL}\"}")
+          # Vytvoríme JSON objekt s dátami pre POST požiadavku
+          data="{\"key\":\"${KEY}\",\"email\":\"${EMAIL}\"}"
+
+          # Vytvoríme POST požiadavku na získanie tokenu
+          token_response=$(curl -X POST -H "Content-Type: application/json" -d "${data}" "https://www.faktury-online.com/api/init")
 
           # Získame token z odpovede
-          TOKEN=$(echo ${INIT_RESPONSE} | jq -r '.token')
+          TOKEN=$(echo ${token_response} | jq -r '.token')
 
-          # Vytvoríme požiadavku na získanie faktúr s použitím získaného tokenu
-          INVOICES_RESPONSE=$(curl -X GET "https://www.faktury-online.com/api/list/created?token=${TOKEN}")
+          # Vytvoríme GET požiadavku na získanie faktúr s použitím získaného tokenu
+          invoices_response=$(curl -X GET "https://www.faktury-online.com/api/list/created?token=${TOKEN}")
 
           # Uložíme odpoveď do súboru (príklad súboru: invoices.json)
-          echo ${INVOICES_RESPONSE} > invoices.json
-
-          # Commitneme a pushneme súbor do GitHub-u
-          git config --global user.email "action@github.com"
-          git config --global user.name "GitHub Action"
-          git add invoices.json
-          git commit -m "New invoices"
-          git push origin HEAD:main
+          echo ${invoices_response} > invoices.json
