@@ -1,9 +1,7 @@
 name: Fetch and Save Invoices
 
 on:
-  pull:
-    branches:
-      - next # Keď pullneš zmey, pustí sa akcia
+  workflow_dispatch
 
 jobs:
   fetch_and_save:
