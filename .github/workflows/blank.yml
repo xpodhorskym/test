@@ -30,7 +30,7 @@ jobs:
           echo ${data}
 
           # Vytvoríme POST požiadavku na získanie tokenu
-          token_response=$(curl -X GET "https://www.faktury-online.com/api/init?data={data}")
+          token_response=$(curl -X GET "https://www.faktury-online.com/api/init?data=${data}")
           echo TOKEN RESPONSE: ${token_response}
 
           # Vytvoríme GET požiadavku na získanie faktúr s použitím získaného tokenu
